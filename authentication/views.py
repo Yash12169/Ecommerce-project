@@ -6,6 +6,12 @@ from django.contrib.auth import authenticate,login
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.generics import ListAPIView
+from .serializers import ReadUserSerializer
+from .permissions import IsAdminUser
+from .authentication import ThirdPartyAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .utils import CustomRateThrottle
 class SignUpView(APIView):
     def post(self,request):
         username = request.data['username']
@@ -28,26 +34,13 @@ class SignUpView(APIView):
         else:
             return Response({"error": True, "msg" : "something went wrong"},status=status.HTTP_400_BAD_REQUEST)
 
-
-# class SignInView(APIView):
-#     authentication_classes = []
-#     permission_classes = []
-#     def post(self,request):
-#         username = request.data['username']
-#         password = request.data['password']
-
-#         if not username:
-#             return Response({"error": True, "msg" : "Username is required"},status=status.HTTP_400_BAD_REQUEST)
-
-#         if not password:
-#             return Response({"error": True, "msg" : "Password is required"},status=status.HTTP_400_BAD_REQUEST)
-#         #sign in view complete karna hai 
-#         user= authenticate(request,username=username,password=password)
-#         if user is not None:
-#             login(request,user)
-#             refresh = RefreshToken.for_user(user)
-#             access_token = str(refresh.access_token)
-#             return Response({"success":True,"msg":"you are successfully logged in","access_token":access_token},status=status.HTTP_200_OK)
-#         else:
-#             return Response({"error": True, "msg" : "Invalid Credentials"},status=status.HTTP_401_UNAUTHORIZED)
+class UserListView(ListAPIView):
+    authentication_classes = (ThirdPartyAuthentication,JWTAuthentication,)
+    permission_classes = (IsAdminUser,)
+    serializer_class = ReadUserSerializer
+    throttle_classes = (CustomRateThrottle,)
+    def get_queryset(self):
+        queryset = User.objects.all()   
+        return queryset
+        
         
