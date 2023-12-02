@@ -8,3 +8,6 @@ class Tags(models.Model):
     updated_at=models.DateTimeField(auto_now=True)
     class Meta:
         db_table='tags'
+
+    def __str__(self):
+        return self.name

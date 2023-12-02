@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import redis
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'tags',
-    'authentication'
+    'authentication',
+    'products',
+    'django_filters',
+    'django_crontab'
 ]
 
 MIDDLEWARE = [
@@ -158,3 +160,16 @@ SIMPLE_JWT = {
 
 
 THIRD_PARTY_TOKEN = 'YfF7SdbP3z5PUl21'
+
+
+EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST='127.0.0.1'
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
+EMAIL_PORT=1025
+EMAIL_USE_TLS=False
+
+
+CRONJOBS = [
+    ('* * * * *', 'products.mailer.email_function')
+]
