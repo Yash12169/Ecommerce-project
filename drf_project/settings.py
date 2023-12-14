@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'authentication',
     'products',
     'django_filters',
-    'django_crontab'
+    'django_crontab',
+    'orders'
 ]
 
 MIDDLEWARE = [
