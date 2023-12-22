@@ -5,7 +5,7 @@ class Product(models.Model):
     name=models.CharField(max_length=100)
     slug= models.CharField(max_length=100)
     description=models.TextField(null=True)
-    price = models.BigIntegerField()
+    price = models.BigIntegerField(default=0)
     quantity = models.BigIntegerField(default=0)
     tags=models.ManyToManyField(Tags,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
